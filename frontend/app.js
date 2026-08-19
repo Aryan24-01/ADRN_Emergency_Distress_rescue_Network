@@ -2,6 +2,13 @@
 // ADRN - MAIN APPLICATION JAVASCRIPT
 // ==========================================
 
+// ==========================================
+// LIVE ADRN BACKEND
+// ==========================================
+
+const API_BASE_URL =
+    "https://adrn-emergency-distress-rescue-network.onrender.com";
+
 
 // ==========================================
 // SCREEN ELEMENTS
@@ -17,9 +24,8 @@ const appScreen = document.getElementById("appScreen");
 // USER DATA
 // ==========================================
 
-let currentUser = JSON.parse(
-    localStorage.getItem("adrnUser")
-) || null;
+let currentUser =
+    JSON.parse(localStorage.getItem("adrnUser")) || null;
 
 let lastSOSLocation = "";
 
@@ -32,13 +38,15 @@ window.addEventListener("load", function () {
 
     setTimeout(function () {
 
-        loadingScreen.classList.add("hidden");
+        if (loadingScreen) {
+            loadingScreen.classList.add("hidden");
+        }
 
         if (currentUser) {
 
             showApplication();
 
-        } else {
+        } else if (loginScreen) {
 
             loginScreen.classList.remove("hidden");
 
@@ -55,9 +63,17 @@ window.addEventListener("load", function () {
 
 function showApplication() {
 
-    loginScreen.classList.add("hidden");
-    registerScreen.classList.add("hidden");
-    appScreen.classList.remove("hidden");
+    if (loginScreen) {
+        loginScreen.classList.add("hidden");
+    }
+
+    if (registerScreen) {
+        registerScreen.classList.add("hidden");
+    }
+
+    if (appScreen) {
+        appScreen.classList.remove("hidden");
+    }
 
     loadProfile();
 
@@ -71,87 +87,96 @@ function showApplication() {
 const loginForm =
     document.getElementById("loginForm");
 
-loginForm.addEventListener(
-    "submit",
-    function (event) {
+if (loginForm) {
 
-        event.preventDefault();
+    loginForm.addEventListener(
+        "submit",
+        function (event) {
 
-        const mobile =
-            document.getElementById("loginMobile").value.trim();
+            event.preventDefault();
 
-        const pin =
-            document.getElementById("loginPin").value.trim();
+            const mobile =
+                document
+                    .getElementById("loginMobile")
+                    .value
+                    .trim();
 
-        const loginMessage =
-            document.getElementById("loginMessage");
+            const pin =
+                document
+                    .getElementById("loginPin")
+                    .value
+                    .trim();
+
+            const loginMessage =
+                document.getElementById("loginMessage");
 
 
-        if (mobile.length < 10) {
+            if (mobile.length < 10) {
 
-            loginMessage.textContent =
-                "Please enter a valid mobile number.";
+                loginMessage.textContent =
+                    "Please enter a valid mobile number.";
 
-            return;
+                return;
+            }
+
+
+            if (!/^\d{4}$/.test(pin)) {
+
+                loginMessage.textContent =
+                    "PIN must contain 4 digits.";
+
+                return;
+            }
+
+
+            const savedUser =
+                JSON.parse(
+                    localStorage.getItem("adrnUser")
+                );
+
+
+            if (!savedUser) {
+
+                loginMessage.textContent =
+                    "No account found. Please create an account first.";
+
+                return;
+            }
+
+
+            if (
+                savedUser.mobile === mobile &&
+                savedUser.pin === pin
+            ) {
+
+                currentUser = savedUser;
+
+                localStorage.setItem(
+                    "adrnUser",
+                    JSON.stringify(currentUser)
+                );
+
+                loginMessage.textContent =
+                    "✓ Login successful";
+
+
+                setTimeout(function () {
+
+                    showApplication();
+
+                }, 500);
+
+            } else {
+
+                loginMessage.textContent =
+                    "Invalid mobile number or PIN.";
+
+            }
+
         }
+    );
 
-
-        if (pin.length !== 4) {
-
-            loginMessage.textContent =
-                "PIN must contain 4 digits.";
-
-            return;
-        }
-
-
-        // Check demo account
-
-        const savedUser =
-            JSON.parse(
-                localStorage.getItem("adrnUser")
-            );
-
-
-        if (!savedUser) {
-
-            loginMessage.textContent =
-                "No account found. Please create an account first.";
-
-            return;
-        }
-
-
-        if (
-            savedUser.mobile === mobile &&
-            savedUser.pin === pin
-        ) {
-
-            currentUser = savedUser;
-
-            localStorage.setItem(
-                "adrnUser",
-                JSON.stringify(currentUser)
-            );
-
-            loginMessage.textContent =
-                "✓ Login successful";
-
-            setTimeout(function () {
-
-                showApplication();
-
-            }, 500);
-
-        } else {
-
-            loginMessage.textContent =
-                "Invalid mobile number or PIN.";
-
-        }
-
-    }
-);
+}
 
 
 // ==========================================
@@ -161,16 +186,24 @@ loginForm.addEventListener(
 const registerButton =
     document.getElementById("registerButton");
 
-registerButton.addEventListener(
-    "click",
-    function () {
+if (registerButton) {
 
-        loginScreen.classList.add("hidden");
+    registerButton.addEventListener(
+        "click",
+        function () {
 
-        registerScreen.classList.remove("hidden");
+            if (loginScreen) {
+                loginScreen.classList.add("hidden");
+            }
 
-    }
-);
+            if (registerScreen) {
+                registerScreen.classList.remove("hidden");
+            }
+
+        }
+    );
+
+}
 
 
 // ==========================================
@@ -180,16 +213,24 @@ registerButton.addEventListener(
 const backToLogin =
     document.getElementById("backToLogin");
 
-backToLogin.addEventListener(
-    "click",
-    function () {
+if (backToLogin) {
 
-        registerScreen.classList.add("hidden");
+    backToLogin.addEventListener(
+        "click",
+        function () {
 
-        loginScreen.classList.remove("hidden");
+            if (registerScreen) {
+                registerScreen.classList.add("hidden");
+            }
 
-    }
-);
+            if (loginScreen) {
+                loginScreen.classList.remove("hidden");
+            }
+
+        }
+    );
+
+}
 
 
 // ==========================================
@@ -199,107 +240,119 @@ backToLogin.addEventListener(
 const registerForm =
     document.getElementById("registerForm");
 
-registerForm.addEventListener(
-    "submit",
-    function (event) {
+if (registerForm) {
 
-        event.preventDefault();
+    registerForm.addEventListener(
+        "submit",
+        function (event) {
 
-
-        const name =
-            document.getElementById("registerName")
-                .value.trim();
-
-        const mobile =
-            document.getElementById("registerMobile")
-                .value.trim();
-
-        const identityId =
-            document.getElementById("identityId")
-                .value.trim();
-
-        const pin =
-            document.getElementById("registerPin")
-                .value.trim();
-
-        const registerMessage =
-            document.getElementById("registerMessage");
+            event.preventDefault();
 
 
-        if (name.length < 2) {
+            const name =
+                document
+                    .getElementById("registerName")
+                    .value
+                    .trim();
+
+            const mobile =
+                document
+                    .getElementById("registerMobile")
+                    .value
+                    .trim();
+
+            const identityId =
+                document
+                    .getElementById("identityId")
+                    .value
+                    .trim();
+
+            const pin =
+                document
+                    .getElementById("registerPin")
+                    .value
+                    .trim();
+
+            const registerMessage =
+                document.getElementById("registerMessage");
+
+
+            if (name.length < 2) {
+
+                registerMessage.textContent =
+                    "Please enter your full name.";
+
+                return;
+            }
+
+
+            if (mobile.length < 10) {
+
+                registerMessage.textContent =
+                    "Please enter a valid mobile number.";
+
+                return;
+            }
+
+
+            if (identityId.length < 4) {
+
+                registerMessage.textContent =
+                    "Please enter the demo identity ID.";
+
+                return;
+            }
+
+
+            if (!/^\d{4}$/.test(pin)) {
+
+                registerMessage.textContent =
+                    "PIN must contain 4 digits.";
+
+                return;
+            }
+
+
+            // Demo user
+
+            const newUser = {
+
+                name: name,
+
+                mobile: mobile,
+
+                pin: pin,
+
+                identityVerified: true,
+
+                identityId: identityId
+
+            };
+
+
+            localStorage.setItem(
+                "adrnUser",
+                JSON.stringify(newUser)
+            );
+
+
+            currentUser = newUser;
+
 
             registerMessage.textContent =
-                "Please enter your full name.";
+                "✓ Identity verified. Account created.";
 
-            return;
+
+            setTimeout(function () {
+
+                showApplication();
+
+            }, 800);
+
         }
+    );
 
-
-        if (mobile.length < 10) {
-
-            registerMessage.textContent =
-                "Please enter a valid mobile number.";
-
-            return;
-        }
-
-
-        if (identityId.length < 4) {
-
-            registerMessage.textContent =
-                "Please enter the demo identity ID.";
-
-            return;
-        }
-
-
-        if (pin.length !== 4) {
-
-            registerMessage.textContent =
-                "PIN must contain 4 digits.";
-
-            return;
-        }
-
-
-        // Create demo user
-
-        const newUser = {
-
-            name: name,
-
-            mobile: mobile,
-
-            pin: pin,
-
-            identityVerified: true,
-
-            identityId: identityId
-
-        };
-
-
-        localStorage.setItem(
-            "adrnUser",
-            JSON.stringify(newUser)
-        );
-
-
-        currentUser = newUser;
-
-
-        registerMessage.textContent =
-            "✓ Identity verified. Account created.";
-
-
-        setTimeout(function () {
-
-            showApplication();
-
-        }, 800);
-
-    }
-);
+}
 
 
 // ==========================================
@@ -323,8 +376,6 @@ navButtons.forEach(function (button) {
                 button.dataset.page;
 
 
-            // Remove active navigation
-
             navButtons.forEach(function (item) {
 
                 item.classList.remove("active");
@@ -332,12 +383,8 @@ navButtons.forEach(function (button) {
             });
 
 
-            // Activate clicked button
-
             button.classList.add("active");
 
-
-            // Hide pages
 
             pages.forEach(function (page) {
 
@@ -346,46 +393,22 @@ navButtons.forEach(function (button) {
             });
 
 
-            // Show selected page
-
             const selectedPage =
                 document.getElementById(targetPage);
 
-            selectedPage.classList.add("active-page");
+
+            if (selectedPage) {
+
+                selectedPage.classList.add(
+                    "active-page"
+                );
+
+            }
 
         }
     );
 
 });
-
-
-// ==========================================
-// BIG SEND SOS BUTTON
-// ==========================================
-
-const sosButton =
-    document.getElementById("sosButton");
-
-sosButton.addEventListener(
-    "click",
-    function () {
-
-        console.log(
-            "🚨 EMERGENCY SOS BUTTON CLICKED"
-        );
-
-
-        // Open SOS page
-
-        openPage("sosPage");
-
-
-        // Automatically get location
-
-        getLocation();
-
-    }
-);
 
 
 // ==========================================
@@ -411,7 +434,12 @@ function openPage(pageId) {
     const target =
         document.getElementById(pageId);
 
-    target.classList.add("active-page");
+
+    if (target) {
+
+        target.classList.add("active-page");
+
+    }
 
 
     const matchingButton =
@@ -430,6 +458,35 @@ function openPage(pageId) {
 
 
 // ==========================================
+// BIG SEND SOS BUTTON
+// ==========================================
+
+const sosButton =
+    document.getElementById("sosButton");
+
+if (sosButton) {
+
+    sosButton.addEventListener(
+        "click",
+        function () {
+
+            console.log(
+                "🚨 EMERGENCY SOS BUTTON CLICKED"
+            );
+
+
+            openPage("sosPage");
+
+
+            getLocation();
+
+        }
+    );
+
+}
+
+
+// ==========================================
 // LOCATION
 // ==========================================
 
@@ -440,14 +497,18 @@ const locationInput =
     document.getElementById("location");
 
 
-locationButton.addEventListener(
-    "click",
-    function () {
+if (locationButton) {
 
-        getLocation();
+    locationButton.addEventListener(
+        "click",
+        function () {
 
-    }
-);
+            getLocation();
+
+        }
+    );
+
+}
 
 
 function getLocation() {
@@ -467,8 +528,12 @@ function getLocation() {
     }
 
 
-    locationButton.textContent =
-        "Getting Location...";
+    if (locationButton) {
+
+        locationButton.textContent =
+            "Getting Location...";
+
+    }
 
 
     navigator.geolocation.getCurrentPosition(
@@ -493,13 +558,24 @@ function getLocation() {
             );
 
 
-            locationInput.value =
+            lastSOSLocation =
                 `${latitude}, ${longitude}`;
 
 
-            locationButton.textContent =
-                "✓ Location Received";
+            if (locationInput) {
 
+                locationInput.value =
+                    lastSOSLocation;
+
+            }
+
+
+            if (locationButton) {
+
+                locationButton.textContent =
+                    "✓ Location Received";
+
+            }
 
         },
 
@@ -516,9 +592,19 @@ function getLocation() {
             );
 
 
-            locationButton.textContent =
-                "Get Location";
+            if (locationButton) {
 
+                locationButton.textContent =
+                    "Get Location";
+
+            }
+
+        },
+
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
         }
 
     );
@@ -533,243 +619,331 @@ function getLocation() {
 const sosForm =
     document.getElementById("sosForm");
 
+if (sosForm) {
 
-sosForm.addEventListener(
-    "submit",
-    async function (event) {
+    sosForm.addEventListener(
+        "submit",
+        async function (event) {
 
-        event.preventDefault();
-
-
-        console.log(
-            "🚨 SOS FORM SUBMITTED"
-        );
-
-
-        const location =
-            locationInput.value.trim();
-            lastSOSLocation = location;
-
-        const reason =
-            document.getElementById("reason")
-                .value.trim();
-
-        const people =
-            document.getElementById("people")
-                .value;
-
-        const helpType =
-            document.getElementById("helpType")
-                .value;
-
-
-        // ==================================
-        // VALIDATION
-        // ==================================
-
-        if (!location) {
-
-            alert(
-                "Please get your location before submitting the SOS."
-            );
-
-            return;
-        }
-
-
-        if (!reason) {
-
-            alert(
-                "Please describe your emergency."
-            );
-
-            return;
-        }
-
-
-        if (!people || Number(people) < 1) {
-
-            alert(
-                "Please enter the number of people."
-            );
-
-            return;
-        }
-
-
-        if (!helpType) {
-
-            alert(
-                "Please select the type of help required."
-            );
-
-            return;
-        }
-
-
-        // ==================================
-        // SOS DATA
-        // ==================================
-
-        const sosData = {
-
-            userName:
-                currentUser
-                    ? currentUser.name
-                    : "Unknown",
-
-            userMobile:
-                currentUser
-                    ? currentUser.mobile
-                    : "Unknown",
-
-            identityVerified:
-                currentUser
-                    ? currentUser.identityVerified
-                    : false,
-
-            location: location,
-
-            reason: reason,
-
-            people: Number(people),
-
-            helpType: helpType,
-
-            status: "PENDING",
-
-            timestamp:
-                new Date().toISOString()
-
-        };
-
-
-        console.log(
-            "📤 Sending SOS data:",
-            sosData
-        );
-
-
-        // ==================================
-        // SEND TO BACKEND
-        // ==================================
-
-        try {
-
-            const response =
-                await fetch(
-                    "https://adrn-emergency-distress-rescue-network.onrender.com/api/sos",
-                    {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json"
-
-                        },
-
-                        body:
-                            JSON.stringify(sosData)
-
-                    }
-                );
+            event.preventDefault();
 
 
             console.log(
-                "📡 Server status:",
-                response.status
+                "🚨 SOS FORM SUBMITTED"
             );
 
 
-            const responseText =
-                await response.text();
+            const location =
+                locationInput
+                    ? locationInput.value.trim()
+                    : "";
 
 
-            console.log(
-                "📥 Server response:",
-                responseText
-            );
+            lastSOSLocation =
+                location;
 
 
-            if (!response.ok) {
+            const reason =
+                document
+                    .getElementById("reason")
+                    .value
+                    .trim();
 
-                throw new Error(
-                    `Server returned ${response.status}: ${responseText}`
+
+            const people =
+                document
+                    .getElementById("people")
+                    .value;
+
+
+            const helpType =
+                document
+                    .getElementById("helpType")
+                    .value;
+
+
+            // ==================================
+            // VALIDATION
+            // ==================================
+
+            if (!location) {
+
+                alert(
+                    "Please get your location before submitting the SOS."
                 );
 
+                return;
             }
 
 
-            const result =
-                JSON.parse(responseText);
+            if (!reason) {
+
+                alert(
+                    "Please describe your emergency."
+                );
+
+                return;
+            }
+
+
+            if (!people || Number(people) < 1) {
+
+                alert(
+                    "Please enter the number of people."
+                );
+
+                return;
+            }
+
+
+            if (!helpType) {
+
+                alert(
+                    "Please select the type of help required."
+                );
+
+                return;
+            }
+
+
+            // ==================================
+            // SOS DATA
+            // ==================================
+
+            const sosData = {
+
+                userName:
+                    currentUser
+                        ? currentUser.name
+                        : "Unknown",
+
+                userMobile:
+                    currentUser
+                        ? currentUser.mobile
+                        : "Unknown",
+
+                identityVerified:
+                    currentUser
+                        ? currentUser.identityVerified
+                        : false,
+
+                location:
+                    location,
+
+                reason:
+                    reason,
+
+                people:
+                    Number(people),
+
+                helpType:
+                    helpType,
+
+                status:
+                    "PENDING",
+
+                timestamp:
+                    new Date().toISOString()
+
+            };
 
 
             console.log(
-                "✅ SOS response:",
-                result
+                "📤 Sending SOS data:",
+                sosData
             );
 
 
-            if (result.success) {
+            // ==================================
+            // SEND SOS TO LIVE BACKEND
+            // ==================================
 
-                alert(
-                    "🚨 SOS sent successfully!"
+            try {
+
+                const SOS_API_URL =
+                    `${API_BASE_URL}/api/sos`;
+
+
+                console.log(
+                    "🌐 Sending SOS to:",
+                    SOS_API_URL
                 );
 
 
-                const confirmation =
-                    document.getElementById(
-                        "confirmation"
+                const response =
+                    await fetch(
+                        SOS_API_URL,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    sosData
+                                )
+
+                        }
                     );
 
 
-                confirmation.classList.remove(
-                    "hidden"
+                console.log(
+                    "📡 Server status:",
+                    response.status
                 );
 
 
-                document.getElementById(
-                    "requestId"
-                ).textContent =
-                    "Request ID: " +
-                    result.requestId;
-                    mapButton.classList.remove("hidden");
+                const responseText =
+                    await response.text();
 
 
-                sosForm.reset();
+                console.log(
+                    "📥 Server response:",
+                    responseText
+                );
 
-                locationInput.value = "";
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Server returned ${response.status}: ${responseText}`
+                    );
+
+                }
 
 
-                // Scroll to confirmation
+                let result;
 
-                confirmation.scrollIntoView({
-                    behavior: "smooth"
-                });
+
+                try {
+
+                    result =
+                        JSON.parse(
+                            responseText
+                        );
+
+                } catch (jsonError) {
+
+                    throw new Error(
+                        "Server returned an invalid response."
+                    );
+
+                }
+
+
+                console.log(
+                    "✅ SOS response:",
+                    result
+                );
+
+
+                if (result.success) {
+
+                    alert(
+                        "🚨 SOS sent successfully!"
+                    );
+
+
+                    const confirmation =
+                        document.getElementById(
+                            "confirmation"
+                        );
+
+
+                    if (confirmation) {
+
+                        confirmation.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+
+
+                    const requestIdElement =
+                        document.getElementById(
+                            "requestId"
+                        );
+
+
+                    if (requestIdElement) {
+
+                        requestIdElement.textContent =
+                            "Request ID: " +
+                            result.requestId;
+
+                    }
+
+
+                    const mapButton =
+                        document.getElementById(
+                            "mapButton"
+                        );
+
+
+                    if (mapButton) {
+
+                        mapButton.classList.remove(
+                            "hidden"
+                        );
+
+                    }
+
+
+                    sosForm.reset();
+
+
+                    if (locationInput) {
+
+                        locationInput.value =
+                            "";
+
+                    }
+
+
+                    if (confirmation) {
+
+                        confirmation.scrollIntoView({
+                            behavior: "smooth"
+                        });
+
+                    }
+
+                } else {
+
+                    throw new Error(
+                        result.message ||
+                        "SOS could not be sent."
+                    );
+
+                }
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "❌ SOS SENDING ERROR:",
+                    error
+                );
+
+
+                alert(
+                    "SOS could not be sent.\n\n" +
+                    error.message
+                );
 
             }
 
         }
+    );
 
-        catch (error) {
-
-            console.error(
-                "❌ SOS SENDING ERROR:",
-                error
-            );
-
-
-            alert(
-                "SOS could not be sent.\n\n" +
-                error.message
-            );
-
-        }
-
-    }
-);
+}
 
 
 // ==========================================
@@ -784,16 +958,32 @@ function loadProfile() {
     }
 
 
-    document.getElementById(
-        "profileName"
-    ).textContent =
-        currentUser.name;
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
 
 
-    document.getElementById(
-        "profileMobile"
-    ).textContent =
-        currentUser.mobile;
+    const profileMobile =
+        document.getElementById(
+            "profileMobile"
+        );
+
+
+    if (profileName) {
+
+        profileName.textContent =
+            currentUser.name;
+
+    }
+
+
+    if (profileMobile) {
+
+        profileMobile.textContent =
+            currentUser.mobile;
+
+    }
 
 }
 
@@ -805,61 +995,128 @@ function loadProfile() {
 const logoutButton =
     document.getElementById("logoutButton");
 
+if (logoutButton) {
 
-logoutButton.addEventListener(
-    "click",
-    function () {
+    logoutButton.addEventListener(
+        "click",
+        function () {
 
-        localStorage.removeItem(
-            "adrnUser"
-        );
-
-
-        currentUser = null;
+            localStorage.removeItem(
+                "adrnUser"
+            );
 
 
-        appScreen.classList.add(
-            "hidden"
-        );
+            currentUser = null;
 
 
-        loginScreen.classList.remove(
-            "hidden"
-        );
+            if (appScreen) {
+
+                appScreen.classList.add(
+                    "hidden"
+                );
+
+            }
 
 
-        console.log(
-            "👋 User logged out"
-        );
+            if (loginScreen) {
 
-    }
-);
+                loginScreen.classList.remove(
+                    "hidden"
+                );
+
+            }
+
+
+            console.log(
+                "👋 User logged out"
+            );
+
+        }
+    );
+
+}
+
 
 // ==========================================
 // OPEN LOCATION IN GOOGLE MAPS
 // ==========================================
 
-const mapButton = document.getElementById("mapButton");
+const mapButton =
+    document.getElementById("mapButton");
 
-mapButton.addEventListener("click", function () {
 
-    if (!lastSOSLocation) {
+if (mapButton) {
 
-        alert("Location is not available.");
+    mapButton.addEventListener(
+        "click",
+        function () {
 
-        return;
-    }
+            if (!lastSOSLocation) {
 
-    const coordinates = lastSOSLocation.split(",");
+                alert(
+                    "Location is not available."
+                );
 
-    const latitude = coordinates[0].trim();
-    const longitude = coordinates[1].trim();
+                return;
+            }
 
-    const mapsURL =
-        `https://www.google.com/maps?q=${latitude},${longitude}`;
 
-    console.log("📍 Opening Google Maps:", mapsURL);
+            const coordinates =
+                lastSOSLocation.split(",");
 
-    window.open(mapsURL, "_blank");
 
-});
+            if (coordinates.length < 2) {
+
+                alert(
+                    "Invalid location coordinates."
+                );
+
+                return;
+            }
+
+
+            const latitude =
+                coordinates[0].trim();
+
+            const longitude =
+                coordinates[1].trim();
+
+
+            const mapsURL =
+                `https://www.google.com/maps?q=${latitude},${longitude}`;
+
+
+            console.log(
+                "📍 Opening Google Maps:",
+                mapsURL
+            );
+
+
+            window.open(
+                mapsURL,
+                "_blank"
+            );
+
+        }
+    );
+
+}
+
+
+// ==========================================
+// DEBUG INFORMATION
+// ==========================================
+
+console.log(
+    "🚑 ADRN application loaded."
+);
+
+console.log(
+    "🌐 Backend:",
+    API_BASE_URL
+);
+
+console.log(
+    "🚨 SOS endpoint:",
+    `${API_BASE_URL}/api/sos`
+);
