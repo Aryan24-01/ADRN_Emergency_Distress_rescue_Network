@@ -658,7 +658,7 @@ sosForm.addEventListener(
 
             const response =
                 await fetch(
-                    "http://localhost:5000/api/sos",
+                    "https://adrn-emergency-distress-rescue-network.onrender.com",
                     {
 
                         method: "POST",
@@ -834,9 +834,6 @@ logoutButton.addEventListener(
 
     }
 );
-// ==========================================
-// OPEN LOCATION IN GOOGLE MAPS
-// ==========================================
 
 // ==========================================
 // OPEN LOCATION IN GOOGLE MAPS

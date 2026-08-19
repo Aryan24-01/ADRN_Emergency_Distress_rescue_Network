@@ -6,7 +6,7 @@
 // Backend URL
 
 const API_URL =
-    "http://localhost:5000";
+    "https://adrn-emergency-distress-rescue-network.onrender.com";
 
 
 
