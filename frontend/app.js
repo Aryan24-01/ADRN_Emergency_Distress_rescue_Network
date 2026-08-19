@@ -658,7 +658,7 @@ sosForm.addEventListener(
 
             const response =
                 await fetch(
-                    "https://adrn-emergency-distress-rescue-network.onrender.com",
+                    "https://adrn-emergency-distress-rescue-network.onrender.com/api/sos",
                     {
 
                         method: "POST",
