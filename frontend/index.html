@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ADRN - Emergency Distress Response Network</title>
+
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+    <!-- ============================= -->
+    <!-- LOADING SCREEN -->
+    <!-- ============================= -->
+
+    <div id="loadingScreen" class="screen loading-screen">
+
+        <div class="loading-content">
+
+            <div class="loading-logo">ADRN</div>
+
+            <h1>Emergency Distress Response Network</h1>
+
+            <p>Fast assistance. Even on weak internet.</p>
+
+            <div class="loader"></div>
+
+            <span>Initializing emergency services...</span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- LOGIN SCREEN -->
+    <!-- ============================= -->
+
+    <div id="loginScreen" class="screen auth-screen hidden">
+
+        <div class="auth-card">
+
+            <div class="auth-logo">ADRN</div>
+
+            <h1>Welcome to ADRN</h1>
+
+            <p class="auth-subtitle">
+                Secure Emergency Access
+            </p>
+
+            <form id="loginForm">
+
+                <label for="loginMobile">
+                    Mobile Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="loginMobile"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+                <label for="loginPin">
+                    PIN
+                </label>
+
+                <input
+                    type="password"
+                    id="loginPin"
+                    placeholder="Enter 4-digit PIN"
+                    maxlength="4"
+                    required
+                >
+
+                <button type="submit" class="primary-button">
+                    LOGIN
+                </button>
+
+            </form>
+
+            <div class="auth-divider">
+                OR
+            </div>
+
+            <button id="registerButton" class="secondary-button">
+                CREATE ACCOUNT
+            </button>
+
+            <p class="security-note">
+                🔐 Your emergency identity is protected.
+            </p>
+
+            <p id="loginMessage" class="form-message"></p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- REGISTER SCREEN -->
+    <!-- ============================= -->
+
+    <div id="registerScreen" class="screen auth-screen hidden">
+
+        <div class="auth-card">
+
+            <div class="auth-logo">ADRN</div>
+
+            <h1>Create Account</h1>
+
+            <p class="auth-subtitle">
+                Register for secure emergency access
+            </p>
+
+            <form id="registerForm">
+
+                <label for="registerName">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="registerName"
+                    placeholder="Enter your full name"
+                    required
+                >
+
+                <label for="registerMobile">
+                    Mobile Number
+                </label>
+
+                <input
+                    type="tel"
+                    id="registerMobile"
+                    placeholder="Enter mobile number"
+                    required
+                >
+
+                <label for="identityId">
+                    Government ID — Demo
+                </label>
+
+                <input
+                    type="text"
+                    id="identityId"
+                    placeholder="XXXX-XXXX-1234"
+                    required
+                >
+
+                <small>
+                    Prototype only. Do not enter your real Aadhaar number.
+                </small>
+
+                <label for="registerPin">
+                    Create 4-digit PIN
+                </label>
+
+                <input
+                    type="password"
+                    id="registerPin"
+                    placeholder="Create PIN"
+                    maxlength="4"
+                    required
+                >
+
+                <button type="submit" class="primary-button">
+                    VERIFY & CREATE ACCOUNT
+                </button>
+
+            </form>
+
+            <button id="backToLogin" class="text-button">
+                ← Back to Login
+            </button>
+
+            <p id="registerMessage" class="form-message"></p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================= -->
+    <!-- MAIN APPLICATION -->
+    <!-- ============================= -->
+
+    <div id="appScreen" class="hidden">
+
+        <!-- HEADER -->
+
+        <header class="app-header">
+
+            <div class="brand">
+                <div class="brand-logo">ADRN</div>
+
+                <div>
+                    <h1>Emergency Distress Response Network</h1>
+                    <span>Emergency assistance system</span>
+                </div>
+            </div>
+
+            <div class="user-status">
+                <span class="verified-badge">
+                    ✓ VERIFIED
+                </span>
+
+                <button id="logoutButton">
+                    Logout
+                </button>
+            </div>
+
+        </header>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="navigation">
+
+            <button
+                class="nav-button active"
+                data-page="homePage">
+                🏠 Home
+            </button>
+
+            <button
+                class="nav-button"
+                data-page="sosPage">
+                🚨 SOS
+            </button>
+
+            <button
+                class="nav-button"
+                data-page="profilePage">
+                👤 Profile
+            </button>
+
+        </nav>
+
+
+        <!-- ============================= -->
+        <!-- HOME -->
+        <!-- ============================= -->
+
+        <main>
+
+            <section id="homePage" class="page active-page">
+
+                <div class="hero">
+
+                    <div>
+
+                        <span class="status-label">
+                            ● SYSTEM ONLINE
+                        </span>
+
+                        <h2>
+                            Emergency Distress
+                            Response Network
+                        </h2>
+
+                        <p>
+                            Fast assistance even when network
+                            connectivity is weak.
+                        </p>
+
+                    </div>
+
+                    <button id="sosButton" class="big-sos-button">
+                        🚨 SEND SOS
+                    </button>
+
+                </div>
+
+
+                <div class="info-grid">
+
+                    <div class="info-card">
+                        <span>📍</span>
+                        <h3>Live Location</h3>
+                        <p>
+                            Your location can be shared
+                            with the rescue team.
+                        </p>
+                    </div>
+
+                    <div class="info-card">
+                        <span>📡</span>
+                        <h3>Emergency Network</h3>
+                        <p>
+                            Designed for emergency situations
+                            and weak connectivity.
+                        </p>
+                    </div>
+
+                    <div class="info-card">
+                        <span>🛡️</span>
+                        <h3>Verified User</h3>
+                        <p>
+                            Only registered users can
+                            submit distress requests.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- SOS PAGE -->
+            <!-- ============================= -->
+
+            <section id="sosPage" class="page">
+
+                <div class="page-heading">
+
+                    <span class="danger-icon">🚨</span>
+
+                    <div>
+                        <h2>Emergency Assistance</h2>
+
+                        <p>
+                            Submit your distress information
+                            to the rescue team.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <form id="sosForm" class="sos-form">
+
+
+                    <!-- LOCATION -->
+
+                    <div class="form-group">
+
+                        <label for="location">
+                            📍 Current Location
+                        </label>
+
+                        <div class="location-row">
+
+                            <input
+                                type="text"
+                                id="location"
+                                placeholder="Click Get My Location"
+                                readonly
+                            >
+
+                            <button
+                                type="button"
+                                id="locationButton"
+                                class="secondary-button">
+                                Get Location
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REASON -->
+
+                    <div class="form-group">
+
+                        <label for="reason">
+                            ⚠️ Reason for Emergency
+                        </label>
+
+                        <textarea
+                            id="reason"
+                            placeholder="Describe what happened..."
+                            required>
+                        </textarea>
+
+                    </div>
+
+
+                    <!-- PEOPLE -->
+
+                    <div class="form-group">
+
+                        <label for="people">
+                            👥 Number of People
+                        </label>
+
+                        <input
+                            type="number"
+                            id="people"
+                            min="1"
+                            placeholder="Number of people"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- HELP TYPE -->
+
+                    <div class="form-group">
+
+                        <label for="helpType">
+                            🆘 Type of Help Required
+                        </label>
+
+                        <select id="helpType" required>
+
+                            <option value="">
+                                Select assistance
+                            </option>
+
+                            <option value="Medical">
+                                Medical Assistance
+                            </option>
+
+                            <option value="Rescue">
+                                Rescue
+                            </option>
+
+                            <option value="Food">
+                                Food & Water
+                            </option>
+
+                            <option value="Shelter">
+                                Shelter
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="submit-sos-button">
+
+                        🚨 SUBMIT DISTRESS REQUEST
+
+                    </button>
+
+                </form>
+
+
+                <!-- CONFIRMATION -->
+
+                <div
+                    id="confirmation"
+                    class="confirmation hidden">
+
+                    <div class="success-icon">
+                        ✓
+                    </div>
+
+                    <h2>SOS Request Sent</h2>
+
+                    <p>
+                        Your distress request has been
+                        successfully recorded.
+                    </p>
+
+                   <strong id="requestId"></strong>
+
+<br><br>
+
+<button
+    type="button"
+    id="mapButton"
+    class="secondary-button hidden">
+    📍 View Location on Map
+</button>
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================= -->
+            <!-- PROFILE -->
+            <!-- ============================= -->
+
+            <section id="profilePage" class="page">
+
+                <div class="profile-card">
+
+                    <div class="profile-header">
+
+                        <div class="profile-avatar">
+                            👤
+                        </div>
+
+                        <div>
+
+                            <h2 id="profileName">
+                                User
+                            </h2>
+
+                            <span class="verified-badge">
+                                ✓ IDENTITY VERIFIED
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="profile-details">
+
+                        <div>
+                            <span>Mobile</span>
+                            <strong id="profileMobile">
+                                —
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Identity</span>
+                            <strong>
+                                XXXX-XXXX-1234
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Account Status</span>
+                            <strong class="verified-text">
+                                ✓ Verified
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </main>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <p>
+                ADRN © 2026 | Emergency Distress Response Network
+            </p>
+
+            <span>
+                Emergency Prototype System
+            </span>
+
+        </footer>
+
+    </div>
+
+
+    <script src="app.js"></script>
+
+</body>
+
+</html>

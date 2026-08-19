@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ADRN - Rescue Command Center</title>
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+
+    <header class="admin-header">
+
+        <div>
+
+            <div class="logo">
+                ADRN
+            </div>
+
+            <div class="subtitle">
+                Emergency Rescue Command Center
+            </div>
+
+        </div>
+
+
+        <div class="connection-status">
+
+            <span class="status-dot"></span>
+
+            Backend Connected
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
+
+    <main class="dashboard">
+
+
+        <h1>Rescue Dashboard</h1>
+
+        <p class="dashboard-description">
+
+            Monitor and manage emergency distress requests.
+
+        </p>
+
+
+
+        <!-- ==========================================
+             STATISTICS
+        =========================================== -->
+
+        <section class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-number" id="totalSOS">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Total SOS
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card pending">
+
+                <div class="stat-number" id="pendingSOS">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Pending
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card responding">
+
+                <div class="stat-number" id="respondingSOS">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Responding
+                </div>
+
+            </div>
+
+
+
+            <div class="stat-card resolved">
+
+                <div class="stat-number" id="resolvedSOS">
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Resolved
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             REFRESH
+        =========================================== -->
+
+        <div class="dashboard-controls">
+
+            <button id="refreshButton">
+
+                🔄 Refresh Requests
+
+            </button>
+
+            <span id="lastUpdated">
+
+                Last updated: --
+
+            </span>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             SOS REQUESTS
+        =========================================== -->
+
+        <section>
+
+            <h2>
+                Emergency Requests
+            </h2>
+
+
+            <div id="sosContainer">
+
+                <div class="loading">
+
+                    Loading SOS requests...
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+
+    <footer>
+
+        <p>
+
+            ADRN © 2026 | Emergency Distress Response Network
+
+        </p>
+
+    </footer>
+
+
+
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
